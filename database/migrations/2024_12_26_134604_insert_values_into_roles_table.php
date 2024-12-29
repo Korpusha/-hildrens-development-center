@@ -1,10 +1,8 @@
 <?php
 
 use App\Enums\RoleName;
+use App\Models\Role;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -13,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::table('roles')->insert([
-            ['name' => RoleName::ADMIN],
-            ['name' => RoleName::GUEST],
-            ['name' => RoleName::TUTOR],
-        ]);
+        Role::query()
+            ->insert([
+                ['name' => RoleName::Admin],
+                ['name' => RoleName::Guest],
+                ['name' => RoleName::Tutor],
+            ]);
     }
 
     /**
@@ -25,8 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::table('roles')
-            ->whereIn('name', [RoleName::ADMIN, RoleName::GUEST, RoleName::TUTOR])
+        Role::query()
+            ->whereIn('name', [RoleName::Admin, RoleName::Guest, RoleName::Tutor])
             ->delete();
     }
 };

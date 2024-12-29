@@ -13,14 +13,23 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $testUser = User::factory()->create([
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'middle_name' => 'Mid',
-            'date_of_birth' => '2000-01-01',
-            'email' => 'test@example.com',
+        $adminUser = User::factory()->create([
+            'email' => 'admin@example.com',
             'password' => 'test12345',
         ]);
-         $testUser->roles()->attach(RoleName::ADMIN->value);
+        $adminUser->roles()->attach(RoleName::Admin->value);
+
+        $guestUser = User::factory()->create([
+            'email' => 'guest@example.com',
+            'password' => 'test12345',
+        ]);
+        $guestUser->roles()->attach(RoleName::Guest->value);
+
+        $tutorUser = User::factory()->create([
+            'email' => 'tutor@example.com',
+            'password' => 'test12345',
+        ]);
+        $tutorUser->roles()->attach(RoleName::Tutor->value);
+        $tutorUser->tutor()->create();
     }
 }

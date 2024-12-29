@@ -13,16 +13,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_roles', function (Blueprint $table) {
-            $table->foreignIdFor(User::class, 'user_id')->constrained();
+        Schema::create('role_users', function (Blueprint $table) {
             $table->string('role_name');
-            $table
-                ->foreign('role_name')
+            $table->unsignedBigInteger('user_id');
+            $table->primary(['role_name', 'user_id']);
+            $table->foreign('role_name')
                 ->references('name')
-                ->on('roles')
+                ->on(app(Role::class)->getTable())
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->primary(['user_id', 'role_name']);
+            $table->foreign('user_id')
+                ->references('id')
+                ->on(app(User::class)->getTable())
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('role_users');
     }
 };

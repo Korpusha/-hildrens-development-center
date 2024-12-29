@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -15,8 +15,6 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
      * @var list<string>
      */
     protected $fillable = [
@@ -29,8 +27,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
      * @var list<string>
      */
     protected $hidden = [
@@ -39,8 +35,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
      * @return array<string, string>
      */
     protected function casts(): array
@@ -56,6 +50,31 @@ class User extends Authenticatable
      */
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_name');
+        return $this->belongsToMany(Role::class, app(RoleUser::class)->getTable(), 'user_id', 'role_name', 'id', 'name');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function tutor(): HasOne
+    {
+        return $this->hasOne(Tutor::class, 'user_id', 'id');
+    }
+
+    /**
+     * @param string $routeName
+     * @return bool
+     */
+    public function hasPermission(string $routeName): bool
+    {
+        $permission = Permission::query()->where('name', '=', $routeName)->first();
+        if (!$permission instanceof Permission) {
+            return true;
+        }
+
+        return PermissionRole::query()
+            ->where('permission_id', '=', $permission->id)
+            ->where('role_name', 'in', $this->roles()->pluck('name'))
+            ->exists();
     }
 }

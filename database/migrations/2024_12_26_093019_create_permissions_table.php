@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id()->primary();
-            $table->string('resource');
-            $table->string('action');
+            $table->string('name')->unique();
             $table->timestamps();
-            $table->unique(['resource', 'action']);
         });
     }
 

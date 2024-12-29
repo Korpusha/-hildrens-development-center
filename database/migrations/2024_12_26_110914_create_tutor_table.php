@@ -13,8 +13,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tutors', function (Blueprint $table) {
-            $table->foreignIdFor(User::class, 'user_id')->primary()->constrained();
-            $table->timestamps();
+            $table->unsignedBigInteger('user_id')->primary();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on(app(User::class)->getTable())
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

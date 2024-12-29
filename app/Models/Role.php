@@ -8,11 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Role extends Model
 {
     /**
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * @return BelongsToMany
      */
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Permission::class, 'role_permissions');
+        return $this->belongsToMany(Permission::class, app(PermissionRole::class)->getTable(), 'role_name', 'permission_id', 'name', 'id');
     }
 
     /**
@@ -20,6 +25,6 @@ class Role extends Model
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_roles', 'role_name', 'user_id');
+        return $this->belongsToMany(User::class, app(RoleUser::class)->getTable(), 'role_name', 'user_id', 'name', 'id');
     }
 }
