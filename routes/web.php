@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\ActivityController as DashboardActivityController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\TutorController as DashboardTutorController;
 use App\Http\Controllers\Website\ProfileController;
@@ -51,13 +52,13 @@ Route::controller(DashboardTutorController::class)->group(function () {
         ->middleware('auth')
         ->name('dashboard.tutors.create');
 
-    Route::get('/dashboard/tutors/{tutor}/edit', 'edit')
-        ->middleware('auth')
-        ->name('dashboard.tutors.edit');
-
     Route::post('/dashboard/tutors', 'store')
         ->middleware('auth')
         ->name('dashboard.tutors.store');
+
+    Route::get('/dashboard/tutors/{tutor}/edit', 'edit')
+        ->middleware('auth')
+        ->name('dashboard.tutors.edit');
 
     Route::patch('/dashboard/tutors/{tutor}', 'update')
         ->middleware('auth')
@@ -66,6 +67,32 @@ Route::controller(DashboardTutorController::class)->group(function () {
     Route::delete('/dashboard/tutors/{tutor}', 'destroy')
         ->middleware('auth')
         ->name('dashboard.tutors.destroy');
+});
+
+Route::controller(DashboardActivityController::class)->group(function () {
+    Route::get('/dashboard/activities', 'index')
+        ->middleware('auth')
+        ->name('dashboard.activities.index');
+
+    Route::get('/dashboard/activities/create', 'create')
+        ->middleware('auth')
+        ->name('dashboard.activities.create');
+
+    Route::post('/dashboard/activities', 'store')
+        ->middleware('auth')
+        ->name('dashboard.activities.store');
+
+    Route::get('/dashboard/activities/{activity}/edit', 'edit')
+        ->middleware('auth')
+        ->name('dashboard.activities.edit');
+
+    Route::patch('/dashboard/activities/{activity}', 'update')
+        ->middleware('auth')
+        ->name('dashboard.activities.update');
+
+    Route::delete('/dashboard/activities/{activity}', 'destroy')
+        ->middleware('auth')
+        ->name('dashboard.activities.destroy');
 });
 
 require __DIR__.'/auth.php';

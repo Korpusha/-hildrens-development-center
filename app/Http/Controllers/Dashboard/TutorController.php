@@ -73,7 +73,7 @@ class TutorController extends Controller
             });
             return redirect()->route('dashboard.tutors.index')->with('success', 'Tutor created successfully!');
         } catch (\Exception $e) {
-            return redirect()->route('dashboard.tutors.index')->with('success', 'Failed to create tutor.');
+            return redirect()->route('dashboard.tutors.index')->with('error', 'Failed to create tutor.');
         }
     }
 
@@ -105,7 +105,7 @@ class TutorController extends Controller
             });
             return redirect()->route('dashboard.tutors.index')->with('success', 'Tutor updated successfully!');
         } catch (\Exception $e) {
-            return redirect()->route('dashboard.tutors.index')->with('success', 'Failed to update tutor.');
+            return redirect()->route('dashboard.tutors.index')->with('error', 'Failed to update tutor.');
         }
     }
 
@@ -121,7 +121,7 @@ class TutorController extends Controller
             });
             return redirect()->route('dashboard.tutors.index')->with('success', 'Tutor deleted successfully!');
         } catch (\Exception $e) {
-            return redirect()->route('dashboard.tutors.index')->with('success', 'Failed to delete tutor.');
+            return redirect()->route('dashboard.tutors.index')->with('error', 'Failed to delete tutor.');
         }
     }
 }
