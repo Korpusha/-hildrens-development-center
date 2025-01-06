@@ -13,6 +13,16 @@ class Tutor extends Model
     public $timestamps = false;
 
     /**
+     * @var string
+     */
+    protected $primaryKey = 'user_id';
+
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * @var list<string>
      */
     protected $fillable = [

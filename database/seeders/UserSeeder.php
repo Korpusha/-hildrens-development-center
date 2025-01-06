@@ -25,11 +25,13 @@ class UserSeeder extends Seeder
         ]);
         $guestUser->roles()->attach(RoleName::Guest->value);
 
-        $tutorUser = User::factory()->create([
-            'email' => 'tutor@example.com',
-            'password' => 'test12345',
-        ]);
-        $tutorUser->roles()->attach(RoleName::Tutor->value);
-        $tutorUser->tutor()->create();
+        for ($i = 0; $i < 25; $i++) {
+            $tutorUser = User::factory()->create([
+                'email' => 'tutor'.$i.'@example.com',
+                'password' => 'test12345',
+            ]);
+            $tutorUser->roles()->attach(RoleName::Tutor->value);
+            $tutorUser->tutor()->create();
+        }
     }
 }
