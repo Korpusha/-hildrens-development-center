@@ -15,6 +15,10 @@
             'title' => 'Activities',
             'route' => 'dashboard.activities.index',
         ],
+        [
+            'title' => 'Cabinets',
+            'route' => 'dashboard.cabinets.index',
+        ],
     ];
 @endphp
 

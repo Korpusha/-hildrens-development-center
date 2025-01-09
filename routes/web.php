@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard\ActivityController as DashboardActivityController;
+use App\Http\Controllers\Dashboard\CabinetController as DashboardCabinetController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\TutorController as DashboardTutorController;
 use App\Http\Controllers\Website\ProfileController;
@@ -93,6 +94,32 @@ Route::controller(DashboardActivityController::class)->group(function () {
     Route::delete('/dashboard/activities/{activity}', 'destroy')
         ->middleware('auth')
         ->name('dashboard.activities.destroy');
+});
+
+Route::controller(DashboardCabinetController::class)->group(function () {
+    Route::get('/dashboard/cabinets', 'index')
+        ->middleware('auth')
+        ->name('dashboard.cabinets.index');
+
+    Route::get('/dashboard/cabinets/create', 'create')
+        ->middleware('auth')
+        ->name('dashboard.cabinets.create');
+
+    Route::post('/dashboard/cabinets', 'store')
+        ->middleware('auth')
+        ->name('dashboard.cabinets.store');
+
+    Route::get('/dashboard/cabinets/{cabinet}/edit', 'edit')
+        ->middleware('auth')
+        ->name('dashboard.cabinets.edit');
+
+    Route::patch('/dashboard/cabinets/{cabinet}', 'update')
+        ->middleware('auth')
+        ->name('dashboard.cabinets.update');
+
+    Route::delete('/dashboard/cabinets/{cabinet}', 'destroy')
+        ->middleware('auth')
+        ->name('dashboard.cabinets.destroy');
 });
 
 require __DIR__.'/auth.php';
