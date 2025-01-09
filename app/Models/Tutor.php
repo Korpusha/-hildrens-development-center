@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tutor extends Model
 {
@@ -35,5 +36,13 @@ class Tutor extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function activityTutorSpecializations(): BelongsToMany
+    {
+        return $this->belongsToMany(Activity::class, app(ActivityTutorSpecialization::class)->getTable(), 'tutor_id', 'activity_name', 'user_id', 'name');
     }
 }

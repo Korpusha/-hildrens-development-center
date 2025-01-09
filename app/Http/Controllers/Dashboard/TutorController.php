@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\Tutor;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class TutorController extends Controller
@@ -37,8 +40,14 @@ class TutorController extends Controller
      */
     public function edit(Tutor $tutor): View
     {
+        $selectedActivityNames = $tutor->activityTutorSpecializations()->pluck('activity_name');
+        $availableActivityNames = Activity::query()->whereNotIn('name', $selectedActivityNames)->pluck('name');
+
         return view('dashboard.tutors.edit', [
             'tutor' => $tutor,
+            // 'availableActivities' => $this->getActivitiesForSelect($availableActivityNames->toArray()),
+             'selectedActivities' => $this->getActivitiesForSelect($selectedActivityNames->toArray()),
+            'availableActivities' => $this->getActivitiesForSelect(Activity::query()->pluck('name')->toArray()),
         ]);
     }
 
@@ -49,11 +58,11 @@ class TutorController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validatedData = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'middle_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'date_of_birth' => 'required|date|before:'.Carbon::now()->subYears(18)->format('Y-m-d'),
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', Rule::unique(User::class, 'email')],
+            'date_of_birth' => ['required', 'date', 'before:' . Carbon::now()->subYears(18)->format('Y-m-d')],
         ]);
 
         try {
@@ -84,24 +93,26 @@ class TutorController extends Controller
      */
     public function update(Request $request, Tutor $tutor): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'middle_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,'.$tutor->user_id,
-            'date_of_birth' => 'required|date|before:'.Carbon::now()->subYears(18)->format('Y-m-d'),
+        $userValidatedData = $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', Rule::unique(User::class, 'email')->ignore($tutor->user_id)],
+            'date_of_birth' => ['required', 'date', 'before:' . Carbon::now()->subYears(18)->format('Y-m-d')],
+        ]);
+
+        $activityTutorSpecializationsValidatedData = $request->validate([
+            'activity_tutor_specializations' => ['required', 'array'],
+            'activity_tutor_specializations.*' => ['nullable', 'string', Rule::exists(Activity::class, 'name')],
         ]);
 
         try {
-            DB::transaction(function () use ($tutor, $validatedData) {
-                $tutor->user()->update([
-                    'first_name' => $validatedData['first_name'],
-                    'last_name' => $validatedData['last_name'],
-                    'middle_name' => $validatedData['middle_name'],
-                    'email' => $validatedData['email'],
-                    'password' => bcrypt(time()),
-                    'date_of_birth' => $validatedData['date_of_birth'],
-                ]);
+            DB::transaction(function () use ($tutor, $userValidatedData, $activityTutorSpecializationsValidatedData) {
+                $tutor->user()->update($userValidatedData);
+
+                $tutor->activityTutorSpecializations()->delete();
+                $activities = Activity::all()->whereIn('name', $activityTutorSpecializationsValidatedData['activity_tutor_specializations'] ?? []);
+                $tutor->activityTutorSpecializations()->sync($activities);
             });
             return redirect()->route('dashboard.tutors.index')->with('success', 'Tutor updated successfully!');
         } catch (\Exception $e) {
@@ -123,5 +134,19 @@ class TutorController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('dashboard.tutors.index')->with('error', 'Failed to delete tutor.');
         }
+    }
+
+    /**
+     * @param array $activityNames
+     * @return array
+     */
+    private function getActivitiesForSelect(array $activityNames) : array
+    {
+        $activitiesForSelect = [];
+        foreach ($activityNames as $activityName) {
+            $activitiesForSelect[] = ['value' => $activityName, 'label' => $activityName];
+        }
+
+        return $activitiesForSelect;
     }
 }

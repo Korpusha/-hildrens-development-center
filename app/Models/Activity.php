@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ActivityType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Activity extends Model
 {
@@ -38,5 +39,13 @@ class Activity extends Model
     public function getTypeDisplayAttribute() : string
     {
         return ActivityType::from($this->type)->name;
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function activityTutorSpecializations(): BelongsToMany
+    {
+        return $this->belongsToMany(Tutor::class, app(ActivityTutorSpecialization::class)->getTable(), 'activity_name', 'tutor_id', 'name', 'user_id');
     }
 }

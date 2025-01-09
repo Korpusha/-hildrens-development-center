@@ -38,7 +38,7 @@
                                     id="type"
                                     name="type"
                                     class="mt-1 block w-full"
-                                    :value="old('type')"
+                                    :values="[old('type')]"
                                     :options="\App\Enums\ActivityType::casesForSelect()"
                                     :emptyOption="true"
                                 />

@@ -10,12 +10,6 @@
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     <section>
-                        <header>
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                {{ __('User Information') }}
-                            </h2>
-                        </header>
-
                         <form method="post" action="{{ route('dashboard.tutors.update', $tutor->user->id) }}" class="mt-6 space-y-6">
                             @csrf
                             @method('patch')
@@ -48,6 +42,21 @@
                                 <x-input-label for="email" :value="__('Email')" />
                                 <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $tutor->user->email)" required autocomplete="username" />
                                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="activity_tutor_specializations" :value="__('Activity Specializations')" />
+                                <x-select-menu
+                                    id="activity_tutor_specializations"
+                                    name="activity_tutor_specializations[]"
+                                    class="mt-1 block w-full"
+                                    :options="$availableActivities"
+                                    :emptyOption="true"
+                                    :emptyOptionText="__('No activity')"
+                                    :values="array_column($selectedActivities, 'value')"
+                                    multiple
+                                />
+                                <x-input-error class="mt-2" :messages="$errors->get('activity_tutor_specializations')" />
                             </div>
 
                             <div class="flex items-center gap-4">
