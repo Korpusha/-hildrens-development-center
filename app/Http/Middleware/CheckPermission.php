@@ -33,6 +33,6 @@ class CheckPermission
             return $next($request);
         }
 
-        return redirect('welcome');
+        return redirect('frontend.frontend.index');
     }
 }

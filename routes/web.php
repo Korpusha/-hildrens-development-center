@@ -4,20 +4,23 @@ use App\Http\Controllers\Dashboard\ActivityController as DashboardActivityContro
 use App\Http\Controllers\Dashboard\CabinetController as DashboardCabinetController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\TutorController as DashboardTutorController;
-use App\Http\Controllers\Website\ProfileController;
-use App\Http\Controllers\Website\TimetableController;
+use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Frontend\TimetableController as FrontendTimetableController;
+use App\Http\Controllers\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /**
- * Website
+ * Frontend
  */
 
-Route::get('/', fn() => redirect()->route('timetable.index'))
-    ->name('welcome');
+Route::controller(FrontendController::class)->group(function () {
+    Route::get('/', 'index')
+        ->name('frontend.frontend.index');
+});
 
-Route::controller(TimetableController::class)->group(function () {
+Route::controller(FrontendTimetableController::class)->group(function () {
     Route::get('/timetable', 'index')
-        ->name('timetable.index');
+        ->name('frontend.timetable.index');
 });
 
 Route::controller(ProfileController::class)->group(function () {
@@ -41,7 +44,7 @@ Route::controller(ProfileController::class)->group(function () {
 Route::controller(DashboardController::class)->group(function () {
     Route::get('/dashboard', 'index')
         ->middleware(['auth', 'verified'])
-        ->name('dashboard');
+        ->name('dashboard.dashboard.index');
 });
 
 Route::controller(DashboardTutorController::class)->group(function () {

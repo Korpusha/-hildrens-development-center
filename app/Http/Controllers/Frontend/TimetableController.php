@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Website;
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\View\View;
@@ -12,6 +12,6 @@ class TimetableController extends Controller
      */
     public function index(): View
     {
-        return view('welcome');
+        return view('frontend.timetable.index');
     }
 }
