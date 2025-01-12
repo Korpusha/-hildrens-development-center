@@ -16,7 +16,7 @@
     $currentDate = $calendarStart->copy();
 @endphp
 
-<x-app-layout>
+<x-dashboard-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Timetable') }}
@@ -25,8 +25,15 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-6">
+                <a href="{{ route('dashboard.lesson-events.create') }}"
+                   class="bg-green-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 bg-green-600 text-white">
+                    New Lesson Event
+                </a>
+            </div>
+
             <div class="flex justify-end items-center mb-4">
-                <form method="GET" action="{{ route('frontend.timetable.index') }}"
+                <form method="GET" action="{{ route('dashboard.timetable.index') }}"
                       class="flex items-center space-x-4">
                     <x-select-menu-normal
                         id="month"
@@ -105,6 +112,6 @@
     </div>
 
     @push('scripts')
-        @vite(['resources/js/frontend/timetable/index.js'])
+        @vite(['resources/js/dashboard/timetable/index.js'])
     @endpush
-</x-app-layout>
+</x-dashboard-layout>

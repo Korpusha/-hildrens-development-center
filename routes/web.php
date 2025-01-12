@@ -3,6 +3,8 @@
 use App\Http\Controllers\Dashboard\ActivityController as DashboardActivityController;
 use App\Http\Controllers\Dashboard\CabinetController as DashboardCabinetController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\LessonEventController as DashboardLessonEventController;
+use App\Http\Controllers\Dashboard\TimetableController as DashboardTimetableController;
 use App\Http\Controllers\Dashboard\TutorController as DashboardTutorController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\TimetableController as FrontendTimetableController;
@@ -21,6 +23,9 @@ Route::controller(FrontendController::class)->group(function () {
 Route::controller(FrontendTimetableController::class)->group(function () {
     Route::get('/timetable', 'index')
         ->name('frontend.timetable.index');
+
+    Route::get('/timetable/{date}', 'show')
+        ->name('frontend.timetable.show');
 });
 
 Route::controller(ProfileController::class)->group(function () {
@@ -123,6 +128,30 @@ Route::controller(DashboardCabinetController::class)->group(function () {
     Route::delete('/dashboard/cabinets/{cabinet}', 'destroy')
         ->middleware('auth')
         ->name('dashboard.cabinets.destroy');
+});
+
+Route::controller(DashboardTimetableController::class)->group(function () {
+    Route::get('/dashboard/timetable', 'index')
+        ->middleware('auth')
+        ->name('dashboard.timetable.index');
+
+    Route::get('/dashboard/timetable/{date}', 'show')
+        ->middleware('auth')
+        ->name('dashboard.timetable.show');
+});
+
+Route::controller(DashboardLessonEventController::class)->group(function () {
+    Route::get('/dashboard/lesson-events/create', 'create')
+        ->middleware('auth')
+        ->name('dashboard.lesson-events.create');
+
+    Route::post('/dashboard/lesson-events', 'store')
+        ->middleware('auth')
+        ->name('dashboard.lesson-events.store');
+
+    Route::delete('/dashboard/lesson-events/{lesson_event}', 'destroy')
+        ->middleware('auth')
+        ->name('dashboard.lesson-events.destroy');
 });
 
 require __DIR__.'/auth.php';

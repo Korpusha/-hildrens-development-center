@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Helpers\Date;
 use App\Http\Controllers\Controller;
 use App\Models\LessonEvent;
 use App\Models\LessonEventTutor;
+use App\Models\Tutor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class TimetableController extends Controller
@@ -33,7 +35,7 @@ class TimetableController extends Controller
             ->get()
             ->groupBy('date');
 
-        return view('frontend.timetable.index', [
+        return view('dashboard.timetable.index', [
             'lessonEvents' => $lessonEvents,
             'month' => $month,
             'year' => $year,
@@ -57,7 +59,7 @@ class TimetableController extends Controller
             ->orderBy('start_time')
             ->get();
 
-        return view('frontend.timetable.show', [
+        return view('dashboard.timetable.show', [
             'lessonEvents' => $lessonEvents,
             'date' => $date,
         ]);

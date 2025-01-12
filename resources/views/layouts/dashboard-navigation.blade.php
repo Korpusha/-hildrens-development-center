@@ -8,6 +8,10 @@
             'route' => 'dashboard.dashboard.index',
         ],
         [
+            'title' => 'Timetable',
+            'route' => 'dashboard.timetable.index',
+        ],
+        [
             'title' => 'Tutors',
             'route' => 'dashboard.tutors.index',
         ],

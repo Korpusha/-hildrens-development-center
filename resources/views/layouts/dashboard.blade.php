@@ -24,27 +24,26 @@
         </header>
     @endisset
 
-    @if (session('success'))
-        <div class="bg-green-500 text-white px-6 py-4 shadow-lg mb-4">
-            <div class="flex items-center">
-                <i class="fas fa-check-circle mr-2 text-white"></i>
-                <span>{{ session('success') }}</span>
-            </div>
+    <div class="success-message-container bg-green-500 text-white px-6 py-4 shadow-lg mb-4" style="display: @if (session('success')) block @else none @endif">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2 text-white"></i>
+            <span>{{ session('success') }}</span>
         </div>
-    @endif
+    </div>
 
-    @if (session('error'))
-        <div class="bg-red-500 text-white px-6 py-4 shadow-lg mb-4">
-            <div class="flex items-center">
-                <i class="fas fa-times-circle mr-2 text-white"></i>
-                <span>{{ session('error') }}</span>
-            </div>
+    <div class="error-message-container bg-red-500 text-white px-6 py-4 shadow-lg mb-4" style="display: @if (session('error')) block @else none @endif">
+        <div class="flex items-center">
+            <i class="fas fa-times-circle mr-2 text-white"></i>
+            <span>{{ session('error') }}</span>
         </div>
-    @endif
+    </div>
 
     <main>
         {{ $slot }}
     </main>
 </div>
+
+@stack('scripts')
+
 </body>
 </html>

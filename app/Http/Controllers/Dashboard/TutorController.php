@@ -41,13 +41,12 @@ class TutorController extends Controller
     public function edit(Tutor $tutor): View
     {
         $selectedActivityNames = $tutor->activityTutorSpecializations()->pluck('activity_name');
-        $availableActivityNames = Activity::query()->whereNotIn('name', $selectedActivityNames)->pluck('name');
+        $availableActivities = Activity::query()->pluck('name');
 
         return view('dashboard.tutors.edit', [
             'tutor' => $tutor,
-            // 'availableActivities' => $this->getActivitiesForSelect($availableActivityNames->toArray()),
-             'selectedActivities' => $this->getActivitiesForSelect($selectedActivityNames->toArray()),
-            'availableActivities' => $this->getActivitiesForSelect(Activity::query()->pluck('name')->toArray()),
+            'selectedActivities' => $this->getActivitiesForSelect($selectedActivityNames->toArray()),
+            'availableActivities' => $this->getActivitiesForSelect($availableActivities->toArray()),
         ]);
     }
 
