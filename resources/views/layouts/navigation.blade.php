@@ -54,7 +54,7 @@
                                 {{ __('Profile') }}
                             </x-dropdown-link>
 
-                            @if ($user->hasPermission('profile.edit'))
+                            @if ($user->hasPermission('dashboard.dashboard.index'))
                                 <x-dropdown-link :href="route('dashboard.dashboard.index')">
                                     {{ __('Dashboard') }}
                                 </x-dropdown-link>
@@ -125,7 +125,7 @@
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
 
-                    @if ($user->hasPermission('profile.edit'))
+                    @if ($user->hasPermission('dashboard.dashboard.index'))
                         <x-responsive-nav-link :href="route('dashboard.dashboard.index')">
                             {{ __('Dashboard') }}
                         </x-responsive-nav-link>

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -74,7 +75,7 @@ class User extends Authenticatable
 
         return PermissionRole::query()
             ->where('permission_id', '=', $permission->id)
-            ->where('role_name', 'in', $this->roles()->pluck('name'))
+            ->whereIn('role_name', $this->roles()->pluck('name')->toArray())
             ->exists();
     }
 }
